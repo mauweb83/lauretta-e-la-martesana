@@ -183,6 +183,8 @@
       width: 100%;
       height: 450px;
       object-fit: cover;
+      cursor: zoom-in;
+      transition: opacity .2s ease;
     }
 
     .popup-content {
@@ -212,7 +214,8 @@
       line-height: 1.6;
     }
 
-    .popup-close {
+    .popup-close,
+    .fullscreen-close {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -228,7 +231,38 @@
       z-index: 2;
     }
 
-    .popup-close:hover { background: rgba(0,0,0,.72); }
+    .popup-close:hover,
+    .fullscreen-close:hover { background: rgba(0,0,0,.72); }
+
+    .fullscreen-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      background: rgba(7, 10, 12, .9);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .2s ease, visibility .2s ease;
+      z-index: 40;
+    }
+
+    .fullscreen-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .fullscreen-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, .4);
+      cursor: zoom-out;
+    }
 
     @media (max-width: 600px) {
       .popup-image { height: 190px; }
@@ -248,7 +282,7 @@
     <div class="map">
       <img class="map-image" src="base.jpeg" alt="Lauretta e il Naviglio della Martesana" />
 
-      <button class="placemark" style="left: 95.6%; top: 11.9%;"
+      <button type="button" class="placemark" style="left: 95.6%; top: 11.9%;"
               data-title="KM 0"
               data-kicker="Punto di interesse"
               data-description="Proprio in questo punto, da una chiusa sul fiume Adda, nasce il Naviglio della Martesana... e da qui comincia la mia pedalata!"
@@ -257,7 +291,7 @@
         <span class="placemark-dot"></span>
       </button>
 
-      <button class="placemark" style="left: 96.5%; top: 16.5%;"
+      <button type="button" class="placemark" style="left: 96.5%; top: 16.5%;"
               data-title="KM 1"
               data-kicker="Punto di interesse"
               data-description="Qui siamo a Concesa, abbiamo da poco superato il Santuario ed il ponticello che porta a Crespi d'Adda"
@@ -266,78 +300,77 @@
         <span class="placemark-dot"></span>
       </button>
 
-      <button class="placemark" style="left: 96.8%; top: 21%;"
-          data-title="KM 2"
-          data-kicker="Punto di interesse"
-          data-description="Secondo chilometro, siamo a Vaprio d'Adda. Alle mie spalle vedete il vecchio mulino sotto la Villa Castelbarco"
-          data-image="./foto/02.jpg">
-      <span class="placemark-label">KM 2</span>
-      <span class="placemark-dot"></span>
-    </button>
+      <button type="button" class="placemark" style="left: 96.8%; top: 21%;"
+              data-title="KM 2"
+              data-kicker="Punto di interesse"
+              data-description="Secondo chilometro, siamo a Vaprio d'Adda. Alle mie spalle vedete il vecchio mulino sotto la Villa Castelbarco"
+              data-image="./foto/02.jpg">
+        <span class="placemark-label">KM 2</span>
+        <span class="placemark-dot"></span>
+      </button>
 
-    <button class="placemark" style="left: 98%; top: 25%;"
-    data-title="KM 3"
-    data-kicker="Punto di interesse"
-    data-description="Qui finisce il primo pezzo di argine. Sono arrivata al ponte sull'Adda che unisce Vaprio (MI) e Canonica (BG)"
-    data-image="./foto/03.jpg">
-      <span class="placemark-label">KM 3</span>
-      <span class="placemark-dot"></span>
-    </button>
+      <button type="button" class="placemark" style="left: 98%; top: 25%;"
+              data-title="KM 3"
+              data-kicker="Punto di interesse"
+              data-description="Qui finisce il primo pezzo di argine. Sono arrivata al ponte sull'Adda che unisce Vaprio (MI) e Canonica (BG)"
+              data-image="./foto/03.jpg">
+        <span class="placemark-label">KM 3</span>
+        <span class="placemark-dot"></span>
+      </button>
 
-    <button class="placemark" style="left: 95.5%; top: 31.4%;"
-    data-title="KM 4"
-    data-kicker="Punto di interesse"
-    data-description="Ho fatto un pezzo di strada dove passavano anche le macchine, ma ho ammirato la scala &quot;Vortice di Leonardo&quot; e la Casa del custode delle acque, dove sono stata anche in gita con la scuola! Ho visto una torre che sembra quella di un castello, il parco di Gioia ed eccomi qui, al chilometro 4, di nuovo sulla ciclabile."
-    data-image="./foto/04.jpg">
-      <span class="placemark-label">KM 4</span>
-      <span class="placemark-dot"></span>
-    </button>
+      <button type="button" class="placemark" style="left: 95.5%; top: 31.4%;"
+              data-title="KM 4"
+              data-kicker="Punto di interesse"
+              data-description="Ho fatto un pezzo di strada dove passavano anche le macchine, ma ho ammirato la scala &quot;Vortice di Leonardo&quot; e la Casa del custode delle acque, dove sono stata anche in gita con la scuola! Ho visto una torre che sembra quella di un castello, il parco di Gioia ed eccomi qui, al chilometro 4, di nuovo sulla ciclabile."
+              data-image="./foto/04.jpg">
+        <span class="placemark-label">KM 4</span>
+        <span class="placemark-dot"></span>
+      </button>
 
-    <button class="placemark" style="left: 95%; top: 34.9%;"
-    data-title="KM 5"
-    data-kicker="Punto di interesse"
-    data-description="Continuo la mia pedalata. Da queste parti c'è una piccola diga e una centrale elettrica nascosta!"
-    data-image="./foto/05.jpg">
-      <span class="placemark-label">KM 5</span>
-      <span class="placemark-dot"></span>
-    </button>
+      <button type="button" class="placemark" style="left: 95%; top: 34.9%;"
+              data-title="KM 5"
+              data-kicker="Punto di interesse"
+              data-description="Continuo la mia pedalata. Da queste parti c'è una piccola diga e una centrale elettrica nascosta!"
+              data-image="./foto/05.jpg">
+        <span class="placemark-label">KM 5</span>
+        <span class="placemark-dot"></span>
+      </button>
 
-    <button class="placemark" style="left: 94.1%; top: 40.9%;"
-    data-title="KM 7"
-    data-kicker="Punto di interesse"
-    data-description="Sono arrivata al chilometro 7, sono a Groppello! Ma dov'è finito il cartello del km 6!? Forse con l'erba alta ai lati della pista non l'ho visto."
-    data-image="./foto/07.jpg">
-      <span class="placemark-label">KM 7</span>
-      <span class="placemark-dot"></span>
-    </button>
+      <button type="button" class="placemark" style="left: 94.1%; top: 40.9%;"
+              data-title="KM 7"
+              data-kicker="Punto di interesse"
+              data-description="Sono arrivata al chilometro 7, sono a Groppello! Ma dov'è finito il cartello del km 6!? Forse con l'erba alta ai lati della pista non l'ho visto."
+              data-image="./foto/07.jpg">
+        <span class="placemark-label">KM 7</span>
+        <span class="placemark-dot"></span>
+      </button>
 
-    
-    <button class="placemark" style="left: 94.8%; top: 44%;"
-    data-title="Salt dal Gatt"
-    data-kicker="Punto di interesse"
-    data-description="Chi conosce il &quot;Villoresi&quot;? Per chi non ne ha mai sentito parlare, è un canale artificiale che parte dal Ticino, è stato realizzato per per irrigare le terre della pianura lombarda e, dopo 86 chilometri, sfocia proprio qui!"
-    data-image="./foto/Villoresi.jpg">
-      <span class="placemark-label">Salt dal Gatt</span>
-      <span class="placemark-dot"></span>
-    </button>
+      <button type="button" class="placemark" style="left: 94.8%; top: 44%;"
+              data-title="Salt dal Gatt"
+              data-kicker="Punto di interesse"
+              data-description="Chi conosce il &quot;Villoresi&quot;? Per chi non ne ha mai sentito parlare, è un canale artificiale che parte dal Ticino, è stato realizzato per per irrigare le terre della pianura lombarda e, dopo 86 chilometri, sfocia proprio qui!"
+              data-image="./foto/Villoresi.jpg">
+        <span class="placemark-label">Salt dal Gatt</span>
+        <span class="placemark-dot"></span>
+      </button>
 
-    <button class="placemark" style="left: 94.9%; top: 46.3%;"
-    data-title="Rudun"
-    data-kicker="Punto di interesse"
-    data-description="Sono arrivata Groppello! Vecchio lavatoio, &quot;Rudun&quot; (il mulino alle mie spalle) e pausa gelato!"
-    data-image="./foto/Rudun.jpg">
-      <span class="placemark-label">Rudun</span>
-      <span class="placemark-dot"></span>
+      <button type="button" class="placemark" style="left: 94.9%; top: 46.3%;"
+              data-title="Rudun"
+              data-kicker="Punto di interesse"
+              data-description="Sono arrivata Groppello! Vecchio lavatoio, &quot;Rudun&quot; (il mulino alle mie spalle) e pausa gelato!"
+              data-image="./foto/Rudun.jpg">
+        <span class="placemark-label">Rudun</span>
+        <span class="placemark-dot"></span>
+      </button>
 
-    <button class="placemark" style="left: 93.1%; top: 54%;"
-    data-title="KM 9"
-    data-kicker="Punto di interesse"
-    data-description="Qui il Naviglio procede verso Ovest e saluta il fiume Adda. Proprio dove fa la curva, potete vedere il ponte &quot;autoportante di Leonardo da Vinci&quot;"
-    data-image="./foto/09.jpg">
-      <span class="placemark-label">KM 9</span>
-      <span class="placemark-dot"></span>
-    </button>
-
+      <button type="button" class="placemark" style="left: 93.1%; top: 54%;"
+              data-title="KM 9"
+              data-kicker="Punto di interesse"
+              data-description="Qui il Naviglio procede verso Ovest e saluta il fiume Adda. Proprio dove fa la curva, potete vedere il ponte &quot;autoportante di Leonardo da Vinci&quot;"
+              data-image="./foto/09.jpg">
+        <span class="placemark-label">KM 9</span>
+        <span class="placemark-dot"></span>
+      </button>
     </div>
   </main>
 
@@ -354,6 +387,11 @@
     </div>
   </section>
 
+  <div class="fullscreen-overlay" id="fullscreen-overlay" aria-hidden="true">
+    <button class="fullscreen-close" id="fullscreen-close" aria-label="Chiudi vista a schermo intero">×</button>
+    <img class="fullscreen-image" id="fullscreen-image" alt="" />
+  </div>
+
   <script>
     const popup = document.getElementById("popup");
     const backdrop = document.getElementById("backdrop");
@@ -362,6 +400,9 @@
     const popupKicker = document.getElementById("popup-kicker");
     const popupTitle = document.getElementById("popup-title");
     const popupDescription = document.getElementById("popup-description");
+    const fullscreenOverlay = document.getElementById("fullscreen-overlay");
+    const fullscreenImage = document.getElementById("fullscreen-image");
+    const fullscreenClose = document.getElementById("fullscreen-close");
 
     let lastTrigger = null;
 
@@ -384,16 +425,48 @@
       if (lastTrigger) lastTrigger.focus();
     }
 
+    function openFullscreen() {
+      if (!popupImage.src) return;
+      fullscreenImage.src = popupImage.src;
+      fullscreenImage.alt = popupTitle.textContent || "Foto";
+      fullscreenOverlay.classList.add("open");
+      fullscreenOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    function closeFullscreen() {
+      fullscreenOverlay.classList.remove("open");
+      fullscreenOverlay.setAttribute("aria-hidden", "true");
+      fullscreenImage.src = "";
+      fullscreenImage.alt = "";
+    }
+
     document.querySelectorAll(".placemark").forEach((trigger) => {
-      trigger.addEventListener("click", () => openPopup(trigger));
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        openPopup(trigger);
+      });
     });
 
+    popupImage.addEventListener("click", openFullscreen);
     closeButton.addEventListener("click", closePopup);
     backdrop.addEventListener("click", closePopup);
+    fullscreenOverlay.addEventListener("click", (event) => {
+      if (event.target === fullscreenOverlay) {
+        closeFullscreen();
+      }
+    });
+    fullscreenClose.addEventListener("click", closeFullscreen);
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && popup.classList.contains("open")) {
-        closePopup();
+      if (event.key === "Escape") {
+        if (fullscreenOverlay.classList.contains("open")) {
+          closeFullscreen();
+          return;
+        }
+
+        if (popup.classList.contains("open")) {
+          closePopup();
+        }
       }
     });
   </script>
