@@ -179,18 +179,45 @@
       pointer-events: auto;
     }
 
+    .popup-image-frame {
+      position: relative;
+      display: grid;
+      min-height: 190px;
+      max-height: 50vh;
+      overflow: hidden;
+      place-items: center;
+      background: #f4efe9;
+    }
+
+    .popup-image-frame.loading .popup-image { opacity: 0; }
+
+    .popup-loader {
+      position: absolute;
+      display: none;
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(217, 39, 63, .2);
+      border-top-color: #d9273f;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    .popup-image-frame.loading .popup-loader { display: block; }
+
     .popup-image {
       display: block;
-      width: calc(100% + 2px);
+      width: 100%;
       max-height: 50vh;
       height: auto;
       object-fit: cover;
       object-position: center;
-      background: #f4efe9;
       cursor: zoom-in;
       transition: opacity .2s ease;
       image-rendering: auto;
-      margin: 0 -1px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .popup-content {
@@ -279,7 +306,8 @@
 
     @media (prefers-reduced-motion: reduce) {
       .placemark::before, .placemark::after { animation: none; }
-      .popup, .backdrop, .placemark-dot { transition: none; }
+      .popup, .backdrop, .placemark-dot, .popup-image { transition: none; }
+      .popup-loader { animation: none; }
     }
   </style>
 </head>
@@ -386,7 +414,10 @@
   <section class="popup" id="popup" role="dialog" aria-modal="true"
            aria-labelledby="popup-title" aria-describedby="popup-description">
     <button class="popup-close" id="popup-close" aria-label="Chiudi">×</button>
-    <img class="popup-image" id="popup-image" alt="" />
+    <div class="popup-image-frame" id="popup-image-frame">
+      <span class="popup-loader" role="status" aria-label="Caricamento foto"></span>
+      <img class="popup-image" id="popup-image" alt="" />
+    </div>
     <div class="popup-content">
       <p class="popup-kicker" id="popup-kicker"></p>
       <h2 class="popup-title" id="popup-title"></h2>
@@ -404,6 +435,7 @@
     const backdrop = document.getElementById("backdrop");
     const closeButton = document.getElementById("popup-close");
     const popupImage = document.getElementById("popup-image");
+    const popupImageFrame = document.getElementById("popup-image-frame");
     const popupKicker = document.getElementById("popup-kicker");
     const popupTitle = document.getElementById("popup-title");
     const popupDescription = document.getElementById("popup-description");
@@ -415,9 +447,17 @@
 
     function openPopup(trigger) {
       lastTrigger = trigger;
+      popupImageFrame.classList.remove("loading");
+      popupImage.removeAttribute("src");
+      popupImage.alt = "";
+      popupKicker.textContent = "";
+      popupTitle.textContent = "";
+      popupDescription.textContent = "";
+
       popupKicker.textContent = trigger.dataset.kicker || "Punto di interesse";
       popupTitle.textContent = trigger.dataset.title || "";
       popupDescription.textContent = trigger.dataset.description || "";
+      if (trigger.dataset.image) popupImageFrame.classList.add("loading");
       popupImage.src = trigger.dataset.image || "";
       popupImage.alt = trigger.dataset.title || "Foto";
 
@@ -425,6 +465,13 @@
       backdrop.classList.add("open");
       closeButton.focus();
     }
+
+    popupImage.addEventListener("load", () => {
+      popupImageFrame.classList.remove("loading");
+    });
+    popupImage.addEventListener("error", () => {
+      popupImageFrame.classList.remove("loading");
+    });
 
     function closePopup() {
       popup.classList.remove("open");
