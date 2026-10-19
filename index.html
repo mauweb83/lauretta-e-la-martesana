@@ -158,137 +158,10 @@
       100% { transform: scale(1.8); opacity: 0; }
     }
 
-    .backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(8, 12, 16, .34);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .22s ease;
-      z-index: 10;
-    }
-
-    .backdrop.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .popup {
-      position: fixed;
-      z-index: 20;
-      top: 50%;
-      left: 50%;
-      width: min(92vw, 430px);
-      max-height: min(86vh, 700px);
-      overflow: hidden;
-      transform: translate(-50%, -46%) scale(.96);
-      opacity: 0;
-      pointer-events: none;
-      background: rgba(255,255,255,.98);
-      border-radius: 18px;
-      box-shadow: 0 24px 80px rgba(0,0,0,.35);
-      transition: transform .22s ease, opacity .22s ease;
-      padding: 0;
-    }
-
-    .popup.open {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .popup-image-frame {
-      position: relative;
-      display: grid;
-      min-height: 190px;
-      max-height: 50vh;
-      overflow: hidden;
-      place-items: center;
-      background: #f4efe9;
-    }
-
-    .popup-nav {
-      position: absolute;
-      top: 50%;
-      display: grid;
-      width: 40px;
-      height: 40px;
-      transform: translateY(-50%);
-      place-items: center;
-      border: 0;
-      border-radius: 50%;
-      background: rgba(0,0,0,.55);
-      color: #fff;
-      font-size: 30px;
-      line-height: 1;
-      cursor: pointer;
-      z-index: 3;
-    }
-
-    .popup-nav:hover { background: rgba(0,0,0,.78); }
-    .popup-prev { left: 10px; }
-    .popup-next { right: 10px; }
-
-    .popup-image-frame.loading .popup-image { opacity: 0; }
-
-    .popup-loader {
-      position: absolute;
-      display: none;
-      width: 36px;
-      height: 36px;
-      border: 3px solid rgba(217, 39, 63, .2);
-      border-top-color: #d9273f;
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-    }
-
-    .popup-image-frame.loading .popup-loader { display: block; }
-
-    .popup-image {
-      display: block;
-      width: 100%;
-      max-height: 50vh;
-      height: auto;
-      object-fit: cover;
-      object-position: center;
-      cursor: zoom-in;
-      transition: opacity .2s ease;
-      image-rendering: auto;
-    }
-
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
-    .popup-content {
-      padding: 18px 18px 22px;
-      overflow: hidden;
-    }
-
-    .popup-kicker {
-      margin: 0 0 6px;
-      color: #d9273f;
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-    }
-
-    .popup-title {
-      margin: 0 42px 10px 0;
-      color: #15191d;
-      font-size: 26px;
-      line-height: 1.1;
-    }
-
-    .popup-description {
-      margin: 0;
-      color: #555e66;
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    .popup-close,
     .fullscreen-close {
       position: absolute;
       top: 12px;
@@ -305,7 +178,6 @@
       z-index: 2;
     }
 
-    .popup-close:hover,
     .fullscreen-close:hover { background: rgba(0,0,0,.72); }
 
     .fullscreen-overlay {
@@ -424,9 +296,6 @@
     }
 
     @media (max-width: 600px) {
-      .popup-image { height: 190px; }
-      .popup-content { padding: 18px; }
-      .popup-title { font-size: 23px; }
       .fullscreen-overlay { padding: 64px 16px 20px; }
       .fullscreen-content {
         flex-direction: column;
@@ -454,8 +323,8 @@
 
     @media (prefers-reduced-motion: reduce) {
       .placemark::before, .placemark::after { animation: none; }
-      .popup, .backdrop, .placemark-dot, .popup-image, .fullscreen-image { transition: none; }
-      .popup-loader, .fullscreen-loader { animation: none; }
+      .placemark-dot, .fullscreen-image { transition: none; }
+      .fullscreen-loader { animation: none; }
     }
   </style>
 </head>
@@ -466,24 +335,6 @@
       <img class="map-image" src="base.jpeg" alt="Lauretta e il Naviglio della Martesana" />
     </div>
   </main>
-
-  <div class="backdrop" id="backdrop"></div>
-
-  <section class="popup" id="popup" role="dialog" aria-modal="true"
-           aria-labelledby="popup-title" aria-describedby="popup-description">
-    <button class="popup-close" id="popup-close" aria-label="Chiudi">×</button>
-    <div class="popup-image-frame" id="popup-image-frame">
-      <span class="popup-loader" role="status" aria-label="Caricamento foto"></span>
-      <button class="popup-nav popup-prev" id="popup-prev" type="button" aria-label="Foto precedente">‹</button>
-      <img class="popup-image" id="popup-image" alt="" />
-      <button class="popup-nav popup-next" id="popup-next" type="button" aria-label="Foto successiva">›</button>
-    </div>
-    <div class="popup-content">
-      <p class="popup-kicker" id="popup-kicker"></p>
-      <h2 class="popup-title" id="popup-title"></h2>
-      <p class="popup-description" id="popup-description"></p>
-    </div>
-  </section>
 
   <div class="fullscreen-overlay" id="fullscreen-overlay" role="dialog" aria-modal="true"
        aria-labelledby="fullscreen-title" aria-describedby="fullscreen-description" aria-hidden="true">
@@ -620,17 +471,7 @@
   </script>
 
   <script>
-    const popup = document.getElementById("popup");
-    const backdrop = document.getElementById("backdrop");
     const map = document.querySelector(".map");
-    const closeButton = document.getElementById("popup-close");
-    const popupImage = document.getElementById("popup-image");
-    const popupImageFrame = document.getElementById("popup-image-frame");
-    const popupPrev = document.getElementById("popup-prev");
-    const popupNext = document.getElementById("popup-next");
-    const popupKicker = document.getElementById("popup-kicker");
-    const popupTitle = document.getElementById("popup-title");
-    const popupDescription = document.getElementById("popup-description");
     const fullscreenOverlay = document.getElementById("fullscreen-overlay");
     const fullscreenContent = document.querySelector(".fullscreen-content");
     const fullscreenImageFrame = document.getElementById("fullscreen-image-frame");
@@ -646,7 +487,7 @@
     let fullscreenIndex = -1;
     let fullscreenImageRequest = 0;
 
-    if(debugMode){
+    if (debugMode) {
       map.addEventListener("click", (event) => {
         if (event.target.closest(".placemark")) return;
         const bounds = map.getBoundingClientRect();
@@ -656,57 +497,13 @@
       });
     }
 
-    function updatePopupContent(trigger) {
-      popupImageFrame.classList.remove("loading");
-      popupImage.removeAttribute("src");
-      popupImage.alt = "";
-      popupKicker.textContent = "";
-      popupTitle.textContent = "";
-      popupDescription.textContent = "";
-
-      popupKicker.textContent = trigger.dataset.kicker || "Punto di interesse";
-      popupTitle.textContent = trigger.dataset.title || "";
-      popupDescription.textContent = trigger.dataset.description || "";
-      if (trigger.dataset.image) popupImageFrame.classList.add("loading");
-      popupImage.src = trigger.dataset.image || "";
-      popupImage.alt = trigger.dataset.title || "Foto";
-    }
-
-    function openPopup(trigger) {
+    function openFullscreen(trigger) {
       lastTrigger = trigger;
-      updatePopupContent(trigger);
-      popup.classList.add("open");
-      backdrop.classList.add("open");
-      closeButton.focus();
-    }
-
-    function showPopupPhoto(direction) {
-      const currentIndex = photoTriggers.indexOf(lastTrigger);
-      if (currentIndex < 0 || photoTriggers.length < 2) return;
-      const nextIndex = (currentIndex + direction + photoTriggers.length) % photoTriggers.length;
-      lastTrigger = photoTriggers[nextIndex];
-      updatePopupContent(lastTrigger);
-    }
-
-    popupImage.addEventListener("load", () => {
-      popupImageFrame.classList.remove("loading");
-    });
-    popupImage.addEventListener("error", () => {
-      popupImageFrame.classList.remove("loading");
-    });
-
-    function closePopup() {
-      popup.classList.remove("open");
-      backdrop.classList.remove("open");
-      if (lastTrigger) lastTrigger.focus();
-    }
-
-    function openFullscreen() {
-      if (!popupImage.src) return;
       fullscreenIndex = photoTriggers.indexOf(lastTrigger);
       updateFullscreenContent(lastTrigger);
       fullscreenOverlay.classList.add("open");
       fullscreenOverlay.setAttribute("aria-hidden", "false");
+      fullscreenClose.focus();
     }
 
     function updateFullscreenContent(trigger) {
@@ -733,7 +530,6 @@
       if (fullscreenIndex < 0 || photoTriggers.length < 2) return;
       fullscreenIndex = (fullscreenIndex + direction + photoTriggers.length) % photoTriggers.length;
       lastTrigger = photoTriggers[fullscreenIndex];
-      updatePopupContent(lastTrigger);
       updateFullscreenContent(lastTrigger);
     }
 
@@ -750,6 +546,7 @@
       fullscreenImage.alt = "";
       fullscreenTitle.textContent = "";
       fullscreenDescription.textContent = "";
+      if (lastTrigger) lastTrigger.focus();
     }
 
     function loadMapPoints() {
@@ -781,7 +578,6 @@
         trigger.style.left = `${point.left}%`;
         trigger.style.top = `${point.top}%`;
         trigger.dataset.title = point.title;
-        trigger.dataset.kicker = "Punto di interesse";
         trigger.dataset.description = point.description;
         trigger.dataset.image = point.image;
 
@@ -802,16 +598,11 @@
       document.querySelectorAll(".placemark").forEach((trigger) => {
         trigger.addEventListener("click", (event) => {
           event.preventDefault();
-          openPopup(trigger);
+          openFullscreen(trigger);
         });
       });
 
-      popupImage.addEventListener("click", openFullscreen);
       fullscreenImage.addEventListener("click", closeFullscreen);
-      popupPrev.addEventListener("click", () => showPopupPhoto(-1));
-      popupNext.addEventListener("click", () => showPopupPhoto(1));
-      closeButton.addEventListener("click", closePopup);
-      backdrop.addEventListener("click", closePopup);
       fullscreenOverlay.addEventListener("click", (event) => {
         if (event.target === fullscreenOverlay) {
           closeFullscreen();
@@ -836,10 +627,6 @@
         if (event.key === "Escape") {
           if (fullscreenOverlay.classList.contains("open")) {
             closeFullscreen();
-            return;
-          }
-          if (popup.classList.contains("open")) {
-            closePopup();
           }
         }
       });
