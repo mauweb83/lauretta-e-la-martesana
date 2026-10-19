@@ -332,6 +332,10 @@
       max-height: 92vh;
     }
 
+    .fullscreen-content.loading .fullscreen-info {
+      visibility: hidden;
+    }
+
     .fullscreen-overlay.open {
       opacity: 1;
       visibility: visible;
@@ -359,14 +363,43 @@
     .fullscreen-next { right: 18px; }
 
     .fullscreen-image {
-      flex: 1 1 auto;
-      min-width: 0;
-      max-width: none;
+      display: block;
+      width: 100%;
       max-height: 92vh;
       object-fit: contain;
       border-radius: 12px;
       box-shadow: 0 25px 60px rgba(0, 0, 0, .4);
       cursor: zoom-out;
+      transition: opacity .2s ease;
+    }
+
+    .fullscreen-image-frame {
+      position: relative;
+      display: grid;
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 200px;
+      max-height: 92vh;
+      place-items: center;
+    }
+
+    .fullscreen-image-frame.loading .fullscreen-image {
+      opacity: 0;
+    }
+
+    .fullscreen-loader {
+      position: absolute;
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 4px solid rgba(255,255,255,.25);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    .fullscreen-image-frame.loading .fullscreen-loader {
+      display: block;
     }
 
     .fullscreen-info {
@@ -402,8 +435,12 @@
         max-height: none;
       }
       .fullscreen-image {
+        max-height: 62vh;
+      }
+      .fullscreen-image-frame {
         flex: 0 1 auto;
-        max-width: 100%;
+        width: 100%;
+        min-height: min(40vh, 220px);
         max-height: 62vh;
       }
       .fullscreen-info {
@@ -417,8 +454,8 @@
 
     @media (prefers-reduced-motion: reduce) {
       .placemark::before, .placemark::after { animation: none; }
-      .popup, .backdrop, .placemark-dot, .popup-image { transition: none; }
-      .popup-loader { animation: none; }
+      .popup, .backdrop, .placemark-dot, .popup-image, .fullscreen-image { transition: none; }
+      .popup-loader, .fullscreen-loader { animation: none; }
     }
   </style>
 </head>
@@ -453,7 +490,10 @@
     <button class="fullscreen-close" id="fullscreen-close" aria-label="Chiudi vista a schermo intero">×</button>
     <button class="fullscreen-nav fullscreen-prev" id="fullscreen-prev" type="button" aria-label="Foto precedente">‹</button>
     <div class="fullscreen-content">
-      <img class="fullscreen-image" id="fullscreen-image" alt="" />
+      <div class="fullscreen-image-frame" id="fullscreen-image-frame">
+        <span class="fullscreen-loader" role="status" aria-label="Caricamento foto"></span>
+        <img class="fullscreen-image" id="fullscreen-image" alt="" />
+      </div>
       <div class="fullscreen-info">
         <h2 class="fullscreen-title" id="fullscreen-title"></h2>
         <p class="fullscreen-description" id="fullscreen-description"></p>
@@ -592,6 +632,8 @@
     const popupTitle = document.getElementById("popup-title");
     const popupDescription = document.getElementById("popup-description");
     const fullscreenOverlay = document.getElementById("fullscreen-overlay");
+    const fullscreenContent = document.querySelector(".fullscreen-content");
+    const fullscreenImageFrame = document.getElementById("fullscreen-image-frame");
     const fullscreenImage = document.getElementById("fullscreen-image");
     const fullscreenTitle = document.getElementById("fullscreen-title");
     const fullscreenDescription = document.getElementById("fullscreen-description");
@@ -602,6 +644,7 @@
 
     let lastTrigger = null;
     let fullscreenIndex = -1;
+    let fullscreenImageRequest = 0;
 
     if(debugMode){
       map.addEventListener("click", (event) => {
@@ -667,10 +710,23 @@
     }
 
     function updateFullscreenContent(trigger) {
-      fullscreenImage.src = trigger.dataset.image || "";
+      const request = ++fullscreenImageRequest;
+      fullscreenContent.classList.add("loading");
+      fullscreenImageFrame.classList.add("loading");
+      fullscreenImageFrame.setAttribute("aria-busy", "true");
       fullscreenImage.alt = trigger.dataset.title || "Foto";
-      fullscreenTitle.textContent = trigger.dataset.title || "";
-      fullscreenDescription.textContent = trigger.dataset.description || "";
+
+      const finishLoading = () => {
+        if (request !== fullscreenImageRequest) return;
+        fullscreenContent.classList.remove("loading");
+        fullscreenImageFrame.classList.remove("loading");
+        fullscreenImageFrame.removeAttribute("aria-busy");
+        fullscreenTitle.textContent = trigger.dataset.title || "";
+        fullscreenDescription.textContent = trigger.dataset.description || "";
+      };
+      fullscreenImage.onload = finishLoading;
+      fullscreenImage.onerror = finishLoading;
+      fullscreenImage.src = trigger.dataset.image || "";
     }
 
     function showFullscreenPhoto(direction) {
@@ -684,6 +740,12 @@
     function closeFullscreen() {
       fullscreenOverlay.classList.remove("open");
       fullscreenOverlay.setAttribute("aria-hidden", "true");
+      fullscreenImageRequest += 1;
+      fullscreenContent.classList.remove("loading");
+      fullscreenImage.onload = null;
+      fullscreenImage.onerror = null;
+      fullscreenImageFrame.classList.remove("loading");
+      fullscreenImageFrame.removeAttribute("aria-busy");
       fullscreenImage.src = "";
       fullscreenImage.alt = "";
       fullscreenTitle.textContent = "";
