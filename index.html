@@ -193,6 +193,28 @@
       background: #f4efe9;
     }
 
+    .popup-nav {
+      position: absolute;
+      top: 50%;
+      display: grid;
+      width: 40px;
+      height: 40px;
+      transform: translateY(-50%);
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(0,0,0,.55);
+      color: #fff;
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .popup-nav:hover { background: rgba(0,0,0,.78); }
+    .popup-prev { left: 10px; }
+    .popup-next { right: 10px; }
+
     .popup-image-frame.loading .popup-image { opacity: 0; }
 
     .popup-loader {
@@ -548,7 +570,9 @@
     <button class="popup-close" id="popup-close" aria-label="Chiudi">×</button>
     <div class="popup-image-frame" id="popup-image-frame">
       <span class="popup-loader" role="status" aria-label="Caricamento foto"></span>
+      <button class="popup-nav popup-prev" id="popup-prev" type="button" aria-label="Foto precedente">‹</button>
       <img class="popup-image" id="popup-image" alt="" />
+      <button class="popup-nav popup-next" id="popup-next" type="button" aria-label="Foto successiva">›</button>
     </div>
     <div class="popup-content">
       <p class="popup-kicker" id="popup-kicker"></p>
@@ -578,6 +602,8 @@
     const closeButton = document.getElementById("popup-close");
     const popupImage = document.getElementById("popup-image");
     const popupImageFrame = document.getElementById("popup-image-frame");
+    const popupPrev = document.getElementById("popup-prev");
+    const popupNext = document.getElementById("popup-next");
     const popupKicker = document.getElementById("popup-kicker");
     const popupTitle = document.getElementById("popup-title");
     const popupDescription = document.getElementById("popup-description");
@@ -625,6 +651,14 @@
       popup.classList.add("open");
       backdrop.classList.add("open");
       closeButton.focus();
+    }
+
+    function showPopupPhoto(direction) {
+      const currentIndex = photoTriggers.indexOf(lastTrigger);
+      if (currentIndex < 0 || photoTriggers.length < 2) return;
+      const nextIndex = (currentIndex + direction + photoTriggers.length) % photoTriggers.length;
+      lastTrigger = photoTriggers[nextIndex];
+      updatePopupContent(lastTrigger);
     }
 
     popupImage.addEventListener("load", () => {
@@ -680,6 +714,8 @@
     });
 
     popupImage.addEventListener("click", openFullscreen);
+    popupPrev.addEventListener("click", () => showPopupPhoto(-1));
+    popupNext.addEventListener("click", () => showPopupPhoto(1));
     closeButton.addEventListener("click", closePopup);
     backdrop.addEventListener("click", closePopup);
     fullscreenOverlay.addEventListener("click", (event) => {
