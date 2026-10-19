@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mappa interattiva</title>
+  <title>Lauretta e il Naviglio della Martesana</title>
   <style>
     * { box-sizing: border-box; }
     html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
@@ -406,6 +406,61 @@
         <span class="placemark-label">KM 9</span>
         <span class="placemark-dot"></span>
       </button>
+
+      <button type="button" class="placemark" style="left: 89.7%; top: 53.1%;"
+            data-title="KM 10"
+            data-kicker="Punto di interesse"
+            data-description="Qui il Naviglio procede verso Ovest e saluta il fiume Adda. Proprio dove fa la curva, potete vedere il ponte &quot;autoportante di Leonardo da Vinci&quot;"
+            data-image="./foto/10.jpg">
+        <span class="placemark-label">KM 10</span>
+        <span class="placemark-dot"></span>
+      </button>
+
+      <button type="button" class="placemark" style="left: 86.0%; top: 51.0%;"
+              data-title="KM 11"
+              data-kicker="Punto di interesse"
+              data-description="Qui il Naviglio procede verso Ovest e saluta il fiume Adda. Proprio dove fa la curva, potete vedere il ponte &quot;autoportante di Leonardo da Vinci&quot;"
+              data-image="./foto/11.jpg">
+        <span class="placemark-label">KM 11</span>
+        <span class="placemark-dot"></span>
+      </button>
+
+      <button type="button" class="placemark" style="left: 79.3%; top: 48.7%;"
+            data-title="KM 13"
+            data-kicker="Punto di interesse"
+            data-description="Qui il Naviglio procede verso Ovest e saluta il fiume Adda. Proprio dove fa la curva, potete vedere il ponte &quot;autoportante di Leonardo da Vinci&quot;"
+            data-image="./foto/13.jpg">
+        <span class="placemark-label">KM 13</span>
+        <span class="placemark-dot"></span>
+      </button>
+
+      <button type="button" class="placemark" style="left: 77.1%; top: 47.3%;"
+              data-title="KM 14"
+              data-kicker="Punto di interesse"
+              data-description="Qui il Naviglio procede verso Ovest e saluta il fiume Adda. Proprio dove fa la curva, potete vedere il ponte &quot;autoportante di Leonardo da Vinci&quot;"
+              data-image="./foto/14.jpg">
+        <span class="placemark-label">KM 14</span>
+        <span class="placemark-dot"></span>
+      </button>
+
+      <button type="button" class="placemark" style="left: 74.2%; top: 47.7%;"
+            data-title="KM 15"
+            data-kicker="Punto di interesse"
+            data-description="Qui il Naviglio procede verso Ovest e saluta il fiume Adda. Proprio dove fa la curva, potete vedere il ponte &quot;autoportante di Leonardo da Vinci&quot;"
+            data-image="./foto/15.jpg">
+        <span class="placemark-label">KM 15</span>
+        <span class="placemark-dot"></span>
+      </button>
+
+      <button type="button" class="placemark" style="left: 84.1%; top: 46.4%;"
+              data-title="Inzago: La festa del paese"
+              data-kicker="Punto di interesse"
+              data-description="Qui il Naviglio procede verso Ovest e saluta il fiume Adda. Proprio dove fa la curva, potete vedere il ponte &quot;autoportante di Leonardo da Vinci&quot;"
+              data-image="./foto/Festa.jpg">
+        <span class="placemark-label">Inzago: La festa del paese</span>
+        <span class="placemark-dot"></span>
+      </button>
+
     </div>
   </main>
 
@@ -433,6 +488,7 @@
   <script>
     const popup = document.getElementById("popup");
     const backdrop = document.getElementById("backdrop");
+    const map = document.querySelector(".map");
     const closeButton = document.getElementById("popup-close");
     const popupImage = document.getElementById("popup-image");
     const popupImageFrame = document.getElementById("popup-image-frame");
@@ -444,6 +500,15 @@
     const fullscreenClose = document.getElementById("fullscreen-close");
 
     let lastTrigger = null;
+
+    map.addEventListener("click", (event) => {
+      if (event.target.closest(".placemark")) return;
+
+      const bounds = map.getBoundingClientRect();
+      const left = ((event.clientX - bounds.left) / bounds.width * 100).toFixed(1);
+      const top = ((event.clientY - bounds.top) / bounds.height * 100).toFixed(1);
+      alert(`left: ${left}%; top: ${top}%`);
+    });
 
     function openPopup(trigger) {
       lastTrigger = trigger;
