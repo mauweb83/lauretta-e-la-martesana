@@ -278,6 +278,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: auto;
       padding: 28px;
       background: rgba(7, 10, 12, .9);
       opacity: 0;
@@ -285,6 +286,14 @@
       pointer-events: none;
       transition: opacity .2s ease, visibility .2s ease;
       z-index: 40;
+    }
+
+    .fullscreen-content {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      width: min(1100px, 100%);
+      max-height: 100%;
     }
 
     .fullscreen-overlay.open {
@@ -314,18 +323,60 @@
     .fullscreen-next { right: 18px; }
 
     .fullscreen-image {
-      max-width: 100%;
-      max-height: 100%;
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: 75%;
+      max-height: 82vh;
       object-fit: contain;
       border-radius: 12px;
       box-shadow: 0 25px 60px rgba(0, 0, 0, .4);
       cursor: zoom-out;
     }
 
+    .fullscreen-info {
+      flex: 0 0 min(300px, 35%);
+      max-height: 82vh;
+      overflow-y: auto;
+      color: #fff;
+    }
+
+    .fullscreen-title {
+      margin: 0 0 14px;
+      font-size: clamp(22px, 3vw, 32px);
+      line-height: 1.15;
+    }
+
+    .fullscreen-description {
+      margin: 0;
+      color: rgba(255,255,255,.82);
+      font-size: 16px;
+      line-height: 1.65;
+      white-space: pre-line;
+    }
+
     @media (max-width: 600px) {
       .popup-image { height: 190px; }
       .popup-content { padding: 18px; }
       .popup-title { font-size: 23px; }
+      .fullscreen-overlay { padding: 64px 20px 24px; }
+      .fullscreen-content {
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+        max-height: none;
+      }
+      .fullscreen-image {
+        flex: 0 1 auto;
+        max-width: 100%;
+        max-height: 55vh;
+      }
+      .fullscreen-info {
+        flex: 0 1 auto;
+        width: 100%;
+        max-height: 28vh;
+      }
+      .fullscreen-prev { left: 8px; }
+      .fullscreen-next { right: 8px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -506,10 +557,17 @@
     </div>
   </section>
 
-  <div class="fullscreen-overlay" id="fullscreen-overlay" aria-hidden="true">
+  <div class="fullscreen-overlay" id="fullscreen-overlay" role="dialog" aria-modal="true"
+       aria-labelledby="fullscreen-title" aria-describedby="fullscreen-description" aria-hidden="true">
     <button class="fullscreen-close" id="fullscreen-close" aria-label="Chiudi vista a schermo intero">×</button>
     <button class="fullscreen-nav fullscreen-prev" id="fullscreen-prev" type="button" aria-label="Foto precedente">‹</button>
-    <img class="fullscreen-image" id="fullscreen-image" alt="" />
+    <div class="fullscreen-content">
+      <img class="fullscreen-image" id="fullscreen-image" alt="" />
+      <div class="fullscreen-info">
+        <h2 class="fullscreen-title" id="fullscreen-title"></h2>
+        <p class="fullscreen-description" id="fullscreen-description"></p>
+      </div>
+    </div>
     <button class="fullscreen-nav fullscreen-next" id="fullscreen-next" type="button" aria-label="Foto successiva">›</button>
   </div>
 
@@ -525,6 +583,8 @@
     const popupDescription = document.getElementById("popup-description");
     const fullscreenOverlay = document.getElementById("fullscreen-overlay");
     const fullscreenImage = document.getElementById("fullscreen-image");
+    const fullscreenTitle = document.getElementById("fullscreen-title");
+    const fullscreenDescription = document.getElementById("fullscreen-description");
     const fullscreenClose = document.getElementById("fullscreen-close");
     const fullscreenPrev = document.getElementById("fullscreen-prev");
     const fullscreenNext = document.getElementById("fullscreen-next");
@@ -583,10 +643,16 @@
     function openFullscreen() {
       if (!popupImage.src) return;
       fullscreenIndex = photoTriggers.indexOf(lastTrigger);
-      fullscreenImage.src = popupImage.src;
-      fullscreenImage.alt = popupTitle.textContent || "Foto";
+      updateFullscreenContent(lastTrigger);
       fullscreenOverlay.classList.add("open");
       fullscreenOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    function updateFullscreenContent(trigger) {
+      fullscreenImage.src = trigger.dataset.image || "";
+      fullscreenImage.alt = trigger.dataset.title || "Foto";
+      fullscreenTitle.textContent = trigger.dataset.title || "";
+      fullscreenDescription.textContent = trigger.dataset.description || "";
     }
 
     function showFullscreenPhoto(direction) {
@@ -594,8 +660,7 @@
       fullscreenIndex = (fullscreenIndex + direction + photoTriggers.length) % photoTriggers.length;
       lastTrigger = photoTriggers[fullscreenIndex];
       updatePopupContent(lastTrigger);
-      fullscreenImage.src = popupImage.src;
-      fullscreenImage.alt = popupTitle.textContent || "Foto";
+      updateFullscreenContent(lastTrigger);
     }
 
     function closeFullscreen() {
@@ -603,6 +668,8 @@
       fullscreenOverlay.setAttribute("aria-hidden", "true");
       fullscreenImage.src = "";
       fullscreenImage.alt = "";
+      fullscreenTitle.textContent = "";
+      fullscreenDescription.textContent = "";
     }
 
     document.querySelectorAll(".placemark").forEach((trigger) => {
