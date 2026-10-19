@@ -293,6 +293,26 @@
       pointer-events: auto;
     }
 
+    .fullscreen-nav {
+      position: absolute;
+      top: 50%;
+      width: 44px;
+      height: 44px;
+      transform: translateY(-50%);
+      border: 0;
+      border-radius: 50%;
+      background: rgba(0,0,0,.55);
+      color: #fff;
+      font-size: 32px;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .fullscreen-nav:hover { background: rgba(0,0,0,.78); }
+    .fullscreen-prev { left: 18px; }
+    .fullscreen-next { right: 18px; }
+
     .fullscreen-image {
       max-width: 100%;
       max-height: 100%;
@@ -488,7 +508,9 @@
 
   <div class="fullscreen-overlay" id="fullscreen-overlay" aria-hidden="true">
     <button class="fullscreen-close" id="fullscreen-close" aria-label="Chiudi vista a schermo intero">×</button>
+    <button class="fullscreen-nav fullscreen-prev" id="fullscreen-prev" type="button" aria-label="Foto precedente">‹</button>
     <img class="fullscreen-image" id="fullscreen-image" alt="" />
+    <button class="fullscreen-nav fullscreen-next" id="fullscreen-next" type="button" aria-label="Foto successiva">›</button>
   </div>
 
   <script>
@@ -504,8 +526,12 @@
     const fullscreenOverlay = document.getElementById("fullscreen-overlay");
     const fullscreenImage = document.getElementById("fullscreen-image");
     const fullscreenClose = document.getElementById("fullscreen-close");
+    const fullscreenPrev = document.getElementById("fullscreen-prev");
+    const fullscreenNext = document.getElementById("fullscreen-next");
+    const photoTriggers = Array.from(document.querySelectorAll(".placemark[data-image]"));
 
     let lastTrigger = null;
+    let fullscreenIndex = -1;
 
     if(debugMode){
       map.addEventListener("click", (event) => {
@@ -517,8 +543,7 @@
       });
     }
 
-    function openPopup(trigger) {
-      lastTrigger = trigger;
+    function updatePopupContent(trigger) {
       popupImageFrame.classList.remove("loading");
       popupImage.removeAttribute("src");
       popupImage.alt = "";
@@ -532,7 +557,11 @@
       if (trigger.dataset.image) popupImageFrame.classList.add("loading");
       popupImage.src = trigger.dataset.image || "";
       popupImage.alt = trigger.dataset.title || "Foto";
+    }
 
+    function openPopup(trigger) {
+      lastTrigger = trigger;
+      updatePopupContent(trigger);
       popup.classList.add("open");
       backdrop.classList.add("open");
       closeButton.focus();
@@ -553,10 +582,20 @@
 
     function openFullscreen() {
       if (!popupImage.src) return;
+      fullscreenIndex = photoTriggers.indexOf(lastTrigger);
       fullscreenImage.src = popupImage.src;
       fullscreenImage.alt = popupTitle.textContent || "Foto";
       fullscreenOverlay.classList.add("open");
       fullscreenOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    function showFullscreenPhoto(direction) {
+      if (fullscreenIndex < 0 || photoTriggers.length < 2) return;
+      fullscreenIndex = (fullscreenIndex + direction + photoTriggers.length) % photoTriggers.length;
+      lastTrigger = photoTriggers[fullscreenIndex];
+      updatePopupContent(lastTrigger);
+      fullscreenImage.src = popupImage.src;
+      fullscreenImage.alt = popupTitle.textContent || "Foto";
     }
 
     function closeFullscreen() {
@@ -582,8 +621,21 @@
       }
     });
     fullscreenClose.addEventListener("click", closeFullscreen);
+    fullscreenPrev.addEventListener("click", () => showFullscreenPhoto(-1));
+    fullscreenNext.addEventListener("click", () => showFullscreenPhoto(1));
 
     document.addEventListener("keydown", (event) => {
+      if (fullscreenOverlay.classList.contains("open")) {
+        if (event.key === "ArrowRight") {
+          showFullscreenPhoto(1);
+          return;
+        }
+        if (event.key === "ArrowLeft") {
+          showFullscreenPhoto(-1);
+          return;
+        }
+      }
+
       if (event.key === "Escape") {
         if (fullscreenOverlay.classList.contains("open")) {
           closeFullscreen();
