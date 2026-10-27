@@ -208,9 +208,19 @@
     }
 
     .placemark:hover .placemark-dot,
-    .placemark:focus-visible .placemark-dot {
+    .placemark:focus-visible .placemark-dot,
+    .placemark.is-highlighted .placemark-dot {
       transform: scale(1.12);
       background: #b71931;
+    }
+
+    .placemark.is-highlighted::before,
+    .placemark.is-highlighted::after {
+      background: rgba(255, 190, 75, .58);
+    }
+
+    .placemark.is-highlighted .placemark-dot {
+      box-shadow: 0 0 0 4px rgba(255, 190, 75, .8), 0 0 18px 8px rgba(255, 190, 75, .9);
     }
 
     .placemark:focus-visible {
@@ -239,7 +249,8 @@
     }
 
     .placemark:hover .placemark-label,
-    .placemark:focus-visible .placemark-label {
+    .placemark:focus-visible .placemark-label,
+    .placemark.is-highlighted .placemark-label {
       opacity: 1;
       transform: translateX(-50%) translateY(-2px);
     }
@@ -924,6 +935,14 @@
 
         thumbnail.append(image, title);
         thumbnail.addEventListener("click", () => openFullscreen(trigger, thumbnail));
+        thumbnail.addEventListener("pointerenter", () => trigger.classList.add("is-highlighted"));
+        thumbnail.addEventListener("pointerleave", () => {
+          if (!thumbnail.matches(":focus")) trigger.classList.remove("is-highlighted");
+        });
+        thumbnail.addEventListener("focus", () => trigger.classList.add("is-highlighted"));
+        thumbnail.addEventListener("blur", () => {
+          if (!thumbnail.matches(":hover")) trigger.classList.remove("is-highlighted");
+        });
         photoRailList.append(thumbnail);
         return thumbnail;
       });
