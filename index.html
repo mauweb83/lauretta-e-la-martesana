@@ -25,8 +25,9 @@
       width: 100dvw;
       height: 100dvh;
       display: flex;
+      gap: clamp(10px, 1.8vw, 24px);
       align-items: center;
-      justify-content: center;
+      padding: clamp(12px, 2vw, 24px);
       overflow: hidden;
       background: radial-gradient(circle at center, #3d2d22 0%, #1a120e 100%);
     }
@@ -43,16 +44,105 @@
       z-index: 1;
     }
 
+    .map-area {
+      display: grid;
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+      place-items: center;
+    }
+
     /* Contenitore mappa: mantiene le proporzioni e mostra l'immagine COMPLETA */
     .map {
       position: relative;
       z-index: 2;
-      width: min(100vw, 152.38vh);
-      height: min(100vh, 65.62vw);
+      width: min(100%, calc((100dvh - 48px) * 1.5238));
       aspect-ratio: 1024 / 672;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
       border-radius: 4px;
       overflow: hidden;
+    }
+
+    .photo-rail {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex: 0 0 clamp(76px, 9vw, 116px);
+      flex-direction: column;
+      gap: 10px;
+      height: 100%;
+      min-height: 0;
+      color: #fff;
+    }
+
+    .photo-rail-title {
+      flex: 0 0 auto;
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-align: center;
+    }
+
+    .photo-rail-list {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-color: rgba(255,255,255,.55) rgba(255,255,255,.12);
+      scrollbar-width: thin;
+    }
+
+    .photo-thumbnail {
+      flex: 0 0 auto;
+      width: 100%;
+      border: 2px solid rgba(255,255,255,.32);
+      border-radius: 8px;
+      padding: 0;
+      overflow: hidden;
+      background: rgba(0,0,0,.4);
+      color: #fff;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color .18s ease, transform .18s ease;
+    }
+
+    .photo-thumbnail:hover,
+    .photo-thumbnail:focus-visible {
+      border-color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .photo-thumbnail:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    .photo-thumbnail[aria-current="true"] {
+      border-color: #f3bb64;
+      box-shadow: 0 0 0 1px #f3bb64;
+    }
+
+    .photo-thumbnail img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    }
+
+    .photo-thumbnail-title {
+      display: block;
+      padding: 5px 6px;
+      overflow: hidden;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .map-image {
@@ -298,6 +388,49 @@
     }
 
     @media (max-width: 700px) {
+      .map-screen {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .map-area {
+        width: 100%;
+      }
+
+      .map {
+        width: min(100%, calc((100dvh - 150px) * 1.5238));
+      }
+
+      .photo-rail {
+        flex: 0 0 clamp(72px, 14vh, 100px);
+        width: 100%;
+        height: auto;
+        gap: 6px;
+      }
+
+      .photo-rail-title {
+        font-size: 12px;
+      }
+
+      .photo-rail-list {
+        flex-direction: row;
+        gap: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 2px 2px 6px;
+      }
+
+      .photo-thumbnail {
+        flex: 0 0 clamp(64px, 17vw, 88px);
+        width: auto;
+      }
+
+      .photo-thumbnail-title {
+        padding: 4px;
+        font-size: 9px;
+      }
+
       .fullscreen-overlay {
         padding: max(56px, env(safe-area-inset-top)) 56px max(12px, env(safe-area-inset-bottom));
       }
@@ -349,11 +482,6 @@
     }
 
     @supports (height: 100dvh) {
-      .map {
-        width: min(100dvw, 152.38dvh);
-        height: min(100dvh, 65.62dvw);
-      }
-
       .fullscreen-content { max-height: 92dvh; }
       @media (max-width: 700px) {
         .fullscreen-content {
@@ -364,7 +492,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       .placemark::before, .placemark::after { animation: none; }
-      .placemark-dot, .fullscreen-image { transition: none; }
+      .placemark-dot, .fullscreen-image, .photo-thumbnail { transition: none; }
       .fullscreen-loader { animation: none; }
     }
   </style>
@@ -372,9 +500,15 @@
 <body>
   <main class="map-screen" aria-label="Mappa interattiva">
     <div class="bg-blur"></div>
-    <div class="map">
-      <img class="map-image" src="base.jpeg" alt="Lauretta e il Naviglio della Martesana" />
+    <div class="map-area">
+      <div class="map">
+        <img class="map-image" src="base.jpeg" alt="Lauretta e il Naviglio della Martesana" />
+      </div>
     </div>
+    <nav class="photo-rail" aria-label="Foto della mappa">
+      <h2 class="photo-rail-title">Foto</h2>
+      <div class="photo-rail-list" id="photo-rail-list"></div>
+    </nav>
   </main>
 
   <div class="fullscreen-overlay" id="fullscreen-overlay" role="dialog" aria-modal="true"
@@ -648,9 +782,12 @@
     const fullscreenClose = document.getElementById("fullscreen-close");
     const fullscreenPrev = document.getElementById("fullscreen-prev");
     const fullscreenNext = document.getElementById("fullscreen-next");
+    const photoRailList = document.getElementById("photo-rail-list");
     let photoTriggers = [];
+    let photoThumbnails = [];
 
     let lastTrigger = null;
+    let returnFocusTarget = null;
     let fullscreenIndex = -1;
     let fullscreenImageRequest = 0;
 
@@ -664,8 +801,9 @@
       });
     }
 
-    function openFullscreen(trigger) {
+    function openFullscreen(trigger, focusTarget = trigger) {
       lastTrigger = trigger;
+      returnFocusTarget = focusTarget;
       fullscreenIndex = photoTriggers.indexOf(lastTrigger);
       updateFullscreenContent(lastTrigger);
       fullscreenOverlay.classList.add("open");
@@ -679,6 +817,14 @@
       fullscreenImageFrame.classList.add("loading");
       fullscreenImageFrame.setAttribute("aria-busy", "true");
       fullscreenImage.alt = trigger.dataset.title || "Foto";
+      const selectedIndex = photoTriggers.indexOf(trigger);
+      photoThumbnails.forEach((thumbnail, index) => {
+        if (index === selectedIndex) {
+          thumbnail.setAttribute("aria-current", "true");
+        } else {
+          thumbnail.removeAttribute("aria-current");
+        }
+      });
 
       const finishLoading = () => {
         if (request !== fullscreenImageRequest) return;
@@ -713,7 +859,8 @@
       fullscreenImage.alt = "";
       fullscreenTitle.textContent = "";
       fullscreenDescription.textContent = "";
-      if (lastTrigger) lastTrigger.focus();
+      if (returnFocusTarget) returnFocusTarget.focus();
+      returnFocusTarget = null;
     }
 
     function loadMapPoints() {
@@ -758,6 +905,28 @@
       });
 
       photoTriggers = Array.from(map.querySelectorAll(".placemark[data-image]"));
+      photoThumbnails = photoTriggers.map((trigger, index) => {
+        const thumbnail = document.createElement("button");
+        thumbnail.type = "button";
+        thumbnail.className = "photo-thumbnail";
+        thumbnail.setAttribute("aria-label", `Apri foto: ${trigger.dataset.title || `Foto ${index + 1}`}`);
+        thumbnail.title = trigger.dataset.title || "";
+
+        const image = document.createElement("img");
+        image.src = trigger.dataset.image;
+        image.alt = "";
+        image.loading = "lazy";
+        image.decoding = "async";
+
+        const title = document.createElement("span");
+        title.className = "photo-thumbnail-title";
+        title.textContent = trigger.dataset.title || "";
+
+        thumbnail.append(image, title);
+        thumbnail.addEventListener("click", () => openFullscreen(trigger, thumbnail));
+        photoRailList.append(thumbnail);
+        return thumbnail;
+      });
     }
 
     try {
