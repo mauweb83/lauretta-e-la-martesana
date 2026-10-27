@@ -25,9 +25,10 @@
       width: 100dvw;
       height: 100dvh;
       display: flex;
-      gap: clamp(10px, 1.8vw, 24px);
+      gap: clamp(6px, .7vw, 10px);
       align-items: center;
-      padding: clamp(12px, 2vw, 24px);
+      justify-content: center;
+      padding: clamp(10px, 1vw, 16px);
       overflow: hidden;
       background: radial-gradient(circle at center, #3d2d22 0%, #1a120e 100%);
     }
@@ -46,7 +47,7 @@
 
     .map-area {
       display: grid;
-      flex: 1 1 auto;
+      flex: 0 1 calc((100dvh - 32px) * 1.5238);
       min-width: 0;
       min-height: 0;
       place-items: center;
@@ -67,7 +68,7 @@
       position: relative;
       z-index: 2;
       display: flex;
-      flex: 0 0 clamp(76px, 9vw, 116px);
+      flex: 0 0 clamp(160px, 15vw, 220px);
       flex-direction: column;
       gap: 10px;
       height: 100%;
@@ -131,7 +132,7 @@
       display: block;
       width: 100%;
       aspect-ratio: 4 / 3;
-      object-fit: cover;
+      object-fit: contain;
     }
 
     .photo-thumbnail-title {
@@ -406,15 +407,19 @@
       }
 
       .map-area {
+        flex: 1 1 auto;
+        height: auto;
         width: 100%;
+        overflow: visible;
+        place-items: center;
       }
 
       .map {
-        width: min(100%, calc((100dvh - 150px) * 1.5238));
+        width: min(100%, calc((100dvh - 226px) * 1.5238));
       }
 
       .photo-rail {
-        flex: 0 0 clamp(72px, 14vh, 100px);
+        flex: 0 0 clamp(126px, 24vh, 176px);
         width: 100%;
         height: auto;
         gap: 6px;
@@ -433,7 +438,7 @@
       }
 
       .photo-thumbnail {
-        flex: 0 0 clamp(64px, 17vw, 88px);
+        flex: 0 0 clamp(108px, 26vw, 156px);
         width: auto;
       }
 
