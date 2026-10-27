@@ -906,6 +906,9 @@
         trigger.dataset.title = point.title;
         trigger.dataset.description = point.description;
         trigger.dataset.image = point.image;
+        trigger.dataset.thumbnail = point.image
+          .replace(/^\.\/foto\//, "./foto/miniature/")
+          .replace(/\.jpe?g$/i, ".webp");
 
         const label = document.createElement("span");
         label.className = "placemark-label";
@@ -925,7 +928,7 @@
         thumbnail.title = trigger.dataset.title || "";
 
         const image = document.createElement("img");
-        image.src = trigger.dataset.image;
+        image.src = trigger.dataset.thumbnail;
         image.alt = "";
         image.loading = "lazy";
         image.decoding = "async";
