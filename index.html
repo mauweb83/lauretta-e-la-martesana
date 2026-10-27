@@ -402,26 +402,27 @@
     @media (max-width: 700px) {
       .map-screen {
         flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
         gap: 10px;
-        padding: 12px;
+        padding: 10px;
       }
 
       .map-area {
-        flex: 1 1 auto;
-        height: auto;
+        flex: 0 0 auto;
         width: 100%;
-        overflow: visible;
         place-items: center;
       }
 
       .map {
-        width: min(100%, calc((100dvh - 226px) * 1.5238));
+        width: min(100%, calc((100dvh - 240px) * 1.5238));
       }
 
       .photo-rail {
-        flex: 0 0 clamp(126px, 24vh, 176px);
+        flex: 1 1 0;
         width: 100%;
         height: auto;
+        min-height: 0;
         gap: 6px;
       }
 
@@ -430,16 +431,11 @@
       }
 
       .photo-rail-list {
-        flex-direction: row;
+        flex-direction: column;
         gap: 8px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        padding: 2px 2px 6px;
-      }
-
-      .photo-thumbnail {
-        flex: 0 0 clamp(108px, 26vw, 156px);
-        width: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 2px 2px 2px 0;
       }
 
       .photo-thumbnail-title {
