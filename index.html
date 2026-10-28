@@ -391,6 +391,13 @@
       line-height: 1.15;
     }
 
+    .fullscreen-date {
+      margin: 0 0 8px;
+      color: #f3bb64;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
     .fullscreen-description {
       margin: 0;
       color: rgba(255,255,255,.82);
@@ -531,7 +538,7 @@
   </main>
 
   <div class="fullscreen-overlay" id="fullscreen-overlay" role="dialog" aria-modal="true"
-       aria-labelledby="fullscreen-title" aria-describedby="fullscreen-description" aria-hidden="true">
+       aria-labelledby="fullscreen-title" aria-describedby="fullscreen-date fullscreen-description" aria-hidden="true">
     <button class="fullscreen-close" id="fullscreen-close" aria-label="Chiudi vista a schermo intero">×</button>
     <button class="fullscreen-nav fullscreen-prev" id="fullscreen-prev" type="button" aria-label="Foto precedente">‹</button>
     <div class="fullscreen-content">
@@ -541,6 +548,7 @@
       </div>
       <div class="fullscreen-info">
         <h2 class="fullscreen-title" id="fullscreen-title"></h2>
+        <p class="fullscreen-date" id="fullscreen-date" hidden></p>
         <p class="fullscreen-description" id="fullscreen-description"></p>
       </div>
     </div>
@@ -553,6 +561,7 @@
     "title": "KM 0",
     "description": "Proprio in questo punto, da una chiusa sul fiume Adda, nasce il Naviglio della Martesana... e da qui comincia la mia pedalata!",
     "image": "./foto/00.jpg",
+    "date": "29 Agosto 2026",
     "left": 95.6,
     "top": 11.9
   },
@@ -560,6 +569,7 @@
     "title": "KM 1",
     "description": "Qui siamo a Concesa, abbiamo da poco superato il Santuario ed il ponticello che porta a Crespi d'Adda",
     "image": "./foto/01.jpg",
+    "date": "29 Agosto 2026",
     "left": 96.5,
     "top": 16.5
   },
@@ -567,6 +577,7 @@
     "title": "KM 2",
     "description": "Secondo chilometro, siamo a Vaprio d'Adda. Alle mie spalle vedete il vecchio mulino sotto la Villa Castelbarco",
     "image": "./foto/02.jpg",
+    "date": "29 Agosto 2026",
     "left": 96.8,
     "top": 21
   },
@@ -574,6 +585,7 @@
     "title": "KM 3",
     "description": "Qui finisce il primo pezzo di argine. Sono arrivata al ponte sull'Adda che unisce Vaprio (MI) e Canonica (BG)",
     "image": "./foto/03.jpg",
+    "date": "29 Agosto 2026",
     "left": 98,
     "top": 25
   },
@@ -581,6 +593,7 @@
     "title": "KM 4",
     "description": "Ho fatto un pezzo di strada dove passavano anche le macchine, ma ho ammirato la scala \"Vortice di Leonardo\" e la Casa del custode delle acque, dove sono stata anche in gita con la scuola! Ho visto una torre che sembra quella di un castello, il parco di Gioia ed eccomi qui, al chilometro 4, di nuovo sulla ciclabile.",
     "image": "./foto/04.jpg",
+    "date": "26 Settembre 2026",
     "left": 95.5,
     "top": 31.4
   },
@@ -588,6 +601,7 @@
     "title": "KM 5",
     "description": "Continuo la mia pedalata. Da queste parti c'è una piccola diga e una centrale elettrica nascosta!",
     "image": "./foto/05.jpg",
+    "date": "26 Settembre 2026",
     "left": 95,
     "top": 34.9
   },
@@ -595,6 +609,7 @@
     "title": "KM 7",
     "description": "Sono arrivata al chilometro 7! Ma dov'è finito il cartello del km 6!? Forse con l'erba alta ai lati della pista non l'ho visto.",
     "image": "./foto/07.jpg",
+    "date": "26 Settembre 2026",
     "left": 94.1,
     "top": 40.9
   },
@@ -602,6 +617,7 @@
     "title": "Salt dal Gatt",
     "description": "Chi conosce il \"Villoresi\"? Per chi non ne ha mai sentito parlare, è un canale artificiale che parte dal Ticino, è stato realizzato per irrigare le terre della pianura lombarda e, dopo 86 chilometri, sfocia proprio qui!",
     "image": "./foto/Villoresi.jpg",
+    "date": "26 Settembre 2026",
     "left": 94.8,
     "top": 44
   },
@@ -609,6 +625,7 @@
     "title": "Rudun",
     "description": "Sono arrivata a Groppello! Vecchio lavatoio, \"Rudun\" (il mulino alle mie spalle) e pausa gelato!",
     "image": "./foto/Rudun.jpg",
+    "date": "26 Settembre 2026",
     "left": 94.9,
     "top": 46.3
   },
@@ -616,6 +633,7 @@
     "title": "KM 9",
     "description": "Qui il Naviglio procede verso Ovest e saluta il fiume Adda. Proprio dove fa la curva, potete vedere il ponte \"autoportante di Leonardo da Vinci\"",
     "image": "./foto/09.jpg",
+    "date": "26 Settembre 2026",
     "left": 93.1,
     "top": 54
   },
@@ -623,6 +641,7 @@
     "title": "KM 10",
     "description": "Oggi altra tappa, papà ha parcheggiato l'auto vicino al ponte di Leonardo e ora procedo verso Milano, ma mi fermerò prima sicuramente!",
     "image": "./foto/10.jpg",
+    "date": "11 Ottobre 2026",
     "left": 89.7,
     "top": 53.1
   },
@@ -630,6 +649,7 @@
     "title": "KM 11",
     "description": "Mi trovo tra Cassano e Inzago. Sto pedalando tra campi e cascine.",
     "image": "./foto/11.jpg",
+    "date": "11 Ottobre 2026",
     "left": 86,
     "top": 51
   },
@@ -637,6 +657,7 @@
     "title": "Inzago: La festa del paese",
     "description": "Piccola deviazione! Oggi a Inzago c'è la festa del paese! Ho fatto una pausa per ammirare le bancarelle, ricaricarmi con un pezzo di torrone e provare ad indovinare il peso del bue che vedete alle mie spalle!",
     "image": "./foto/Festa.jpg",
+    "date": "11 Ottobre 2026",
     "left": 84.1,
     "top": 46.4
   },
@@ -644,6 +665,7 @@
     "title": "KM 13",
     "description": "Ho superato il centro di Inzago, procedo verso Milano!",
     "image": "./foto/13.jpg",
+    "date": "11 Ottobre 2026",
     "left": 79.3,
     "top": 48.7
   },
@@ -651,6 +673,7 @@
     "title": "KM 14",
     "description": "Sono arrivata al chilometro 14! Davanti a me vedo il centro commerciale \"La Corte Lombarda\"... Potremmo fermarci per fare shopping, ma io preferisco pedalare ancora un po'!",
     "image": "./foto/14.jpg",
+    "date": "11 Ottobre 2026",
     "left": 77.1,
     "top": 47.3
   },
@@ -658,6 +681,7 @@
     "title": "KM 15",
     "description": "Ma che carina la casetta alle mie spalle! Sembra un piccolo cottage immerso nel verde, con il tetto spiovente e le finestre colorate. Mi fermo un attimo per ammirarla e scattare una foto! Per oggi mi fermo qui, al chilometro 15, ma tornerò presto per continuare la mia pedalata lungo il Naviglio della Martesana!",
     "image": "./foto/15.jpg",
+    "date": "11 Ottobre 2026",
     "left": 74.2,
     "top": 47.7
   },
@@ -665,6 +689,7 @@
     "title": "KM 17",
     "description": "Ripartiamo da qui, perchè la pista ciclabile è interrotta per lavori. Siamo al chilometro 17.",
     "image": "./foto/17.jpg",
+    "date": "24 Ottobre 2026",
     "left": 68.2,
     "top": 52.6
   },
@@ -672,6 +697,7 @@
     "title": "KM 18",
     "description": "Sono a Gorgonzola! Città del famoso formaggio!",
     "image": "./foto/18.jpg",
+    "date": "24 Ottobre 2026",
     "left": 64.8,
     "top": 54.7
   },
@@ -679,6 +705,7 @@
     "title": "Ponte di Legno",
     "description": "Qui la strada si fa stretta e devo proseguire a piedi. In questo punto c'è un vecchio ponte di legno che passa sopra il Naviglio della Martesana. Mi fermo un attimo per ammirarlo e scattare qualche foto",
     "image": "./foto/Gorgonzola.jpg",
+    "date": "24 Ottobre 2026",
     "left": 62.7,
     "top": 54.4
   },
@@ -686,6 +713,7 @@
     "title": "KM 19",
     "description": "Sono sempre a Gorgonzola, ma questa volta il cartello con il numero 19 l'hanno nascosto bene! Chi lo trova?",
     "image": "./foto/19.jpg",
+    "date": "24 Ottobre 2026",
     "left": 61.2,
     "top": 54.8
   },
@@ -693,6 +721,7 @@
     "title": "KM 20",
     "description": "Ora penso di essere tra Villa Pompea e Bussero",
     "image": "./foto/20.jpg",
+    "date": "24 Ottobre 2026",
     "left": 59.0,
     "top": 57.6
   },
@@ -700,6 +729,7 @@
     "title": "KM 21",
     "description": "Niente di particolare, ma il cartello del km 21 l'ho trovato!",
     "image": "./foto/21.jpg",
+    "date": "24 Ottobre 2026",
     "left": 56.2,
     "top": 59.2
   },
@@ -707,6 +737,7 @@
     "title": "KM 22",
     "description": "Wow, si vede che ci stiamo avvicinando alla city! Sono a Cassina de Pecchi e vedo la metropolitana!",
     "image": "./foto/22.jpg",
+    "date": "24 Ottobre 2026",
     "left": 52.8,
     "top": 59.5
   },
@@ -714,6 +745,7 @@
     "title": "KM 23",
     "description": "Mi fermo qui per una pausetta! Ci sono tante persone che passeggiano e pedalano lungo il Naviglio della Martesana.",
     "image": "./foto/23.jpg",
+    "date": "24 Ottobre 2026",
     "left": 50.3,
     "top": 59.4
   },
@@ -721,6 +753,7 @@
     "title": "KM 24",
     "description": "Un cartello mi indica che sono arrivata al chilometro 24! Sono a Cernusco sul Naviglio!",
     "image": "./foto/24.jpg",
+    "date": "24 Ottobre 2026",
     "left": 47.6,
     "top": 59.6
   },
@@ -728,6 +761,7 @@
     "title": "Il parco di Cernusco",
     "description": "Oggi parcheggio in prossimità del parco di Cernusco sul Naviglio. Qualche foto con un masso gigante e poi torno sulla ciclabile lungo la Martesana.",
     "image": "./foto/Cernusco.jpg",
+    "date": "25 Ottobre 2026",
     "left": 45.3,
     "top": 56.3
   },
@@ -735,6 +769,7 @@
     "title": "KM 25",
     "description": "Qui c'è un bellissimo parco giochi e un chioschetto, ma sono appena partita e non è tempo di fermarsi!",
     "image": "./foto/25.jpg",
+    "date": "25 Ottobre 2026",
     "left": 44.8,
     "top": 61.6
     },
@@ -742,6 +777,7 @@
     "title": "Mulino Cernusco",
     "description": "Sono tornata a Groppello!? No, sono a Cernusco sul Naviglio! Anche qui c'è un mulino!",
     "image": "./foto/MulinoCernusco.jpg",
+    "date": "25 Ottobre 2026",
     "left": 42.7,
     "top":  62.1
   },
@@ -749,6 +785,7 @@
     "title": "KM 26",
     "description": "Sono arrivata al chilometro 26! Il tempo non è dei migliori; sono indecisa se andare avanti o tornare alla macchina.",
     "image": "./foto/26.jpg",
+    "date": "25 Ottobre 2026",
     "left": 40.5,
     "top": 61.7
   },
@@ -756,6 +793,7 @@
     "title": "KM 27",
     "description": "Prosego verso Milano! Sono di corsa! Non mi fermo nemmeno per una foto!",
     "image": "./foto/27.jpg",
+    "date": "25 Ottobre 2026",
     "left":35.7,
     "top":  60.8
   },
@@ -763,6 +801,7 @@
     "title": "Albero Wow",
     "description": "Ma che roba! Un albero che sembra un'opera d'arte! Mi fermo un attimo per ammirarlo!",
     "image": "./foto/Albero.jpg",
+    "date": "25 Ottobre 2026",
     "left": 37.4,
     "top":61.2
   },
@@ -770,6 +809,7 @@
     "title": "KM 28",
     "description": "Ormai Cernusco è alle spalle! Sono arrivata a Vimodrone! Il cielo è grigio, ma non piove ancora!",
     "image": "./foto/28.jpg",
+    "date": "25 Ottobre 2026",
     "left": 32.9,
     "top": 62.1
   },
@@ -777,6 +817,7 @@
     "title": "KM 29",
     "description": "Il cartello del chilometro è nascosto! Mi tocca salire su questo ponte per scattare una foto!",
     "image": "./foto/29.jpg",
+    "date": "25 Ottobre 2026",
     "left": 28.7,
     "top": 63.6
   },
@@ -784,6 +825,7 @@
     "title": "Cologno Monzese",
     "description": "Ceravo il cartello col numero 30, ma nulla... Sono passata sotto la tangenziale Est e mi trovo a Cologno Monzese, dove ci sono gli studi di Mediaset! Milano è sempre più vicina! Oggi però mi fermo qui! Niente pioggia fino ad ora, ma meglio non rischiare!",
     "image": "./foto/Cologno.jpg",
+    "date": "25 Ottobre 2026",
     "left": 24.4,
     "top": 62.3
   }
@@ -797,6 +839,7 @@
     const fullscreenImageFrame = document.getElementById("fullscreen-image-frame");
     const fullscreenImage = document.getElementById("fullscreen-image");
     const fullscreenTitle = document.getElementById("fullscreen-title");
+    const fullscreenDate = document.getElementById("fullscreen-date");
     const fullscreenDescription = document.getElementById("fullscreen-description");
     const fullscreenClose = document.getElementById("fullscreen-close");
     const fullscreenPrev = document.getElementById("fullscreen-prev");
@@ -851,6 +894,8 @@
         fullscreenImageFrame.classList.remove("loading");
         fullscreenImageFrame.removeAttribute("aria-busy");
         fullscreenTitle.textContent = trigger.dataset.title || "";
+        fullscreenDate.textContent = trigger.dataset.date || "";
+        fullscreenDate.hidden = !trigger.dataset.date;
         fullscreenDescription.textContent = trigger.dataset.description || "";
       };
       fullscreenImage.onload = finishLoading;
@@ -877,6 +922,8 @@
       fullscreenImage.src = "";
       fullscreenImage.alt = "";
       fullscreenTitle.textContent = "";
+      fullscreenDate.textContent = "";
+      fullscreenDate.hidden = true;
       fullscreenDescription.textContent = "";
       if (returnFocusTarget) returnFocusTarget.focus();
       returnFocusTarget = null;
@@ -893,6 +940,7 @@
           !point ||
           typeof point.title !== "string" ||
           typeof point.description !== "string" ||
+          (point.date !== undefined && typeof point.date !== "string") ||
           typeof point.image !== "string" ||
           !point.image ||
           !Number.isFinite(point.left) ||
@@ -911,6 +959,7 @@
         trigger.style.left = `${point.left}%`;
         trigger.style.top = `${point.top}%`;
         trigger.dataset.title = point.title;
+        trigger.dataset.date = point.date || "";
         trigger.dataset.description = point.description;
         trigger.dataset.image = point.image;
         trigger.dataset.thumbnail = point.image
